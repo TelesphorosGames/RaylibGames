@@ -5,15 +5,24 @@ int main()
     const int Width = 512;
     const int Height = 380;
 
-    const int RectWidth = {40};
-    const int RectHeight = {65};
-
-    int posY = { Height - RectHeight} ;  
     int Velocity = {0};
     int JumpVelocity = {-22};
     const int Gravity = {1};
 
     bool bIsInAir = false;
+
+
+
+    Texture2D ScarfyCharacter = LoadTexture("textures/scarfy.png");
+    Rectangle ScarfyBoundsRectangle;
+    ScarfyBoundsRectangle.width = ScarfyCharacter.width/6;
+    ScarfyBoundsRectangle.height = ScarfyCharacter.height;
+    ScarfyBoundsRectangle.x = 0;
+    ScarfyBoundsRectangle.y = 0;
+
+    Vector2 ScarfyPosition;
+    ScarfyPosition.x = Width/2 - ScarfyBoundsRectangle.width/2;
+    ScarfyPosition.y = Height - ScarfyBoundsRectangle.height;
 
     InitWindow(Width, Height, "Dapper Dasher");
     SetTargetFPS(60);
@@ -25,15 +34,12 @@ int main()
 
         
 
-        DrawRectangle(Width/2, posY, RectWidth, RectHeight, GREEN   );
-
-
-
        
-        if (posY >= Height-RectHeight)
+       
+        if(ScarfyPosition.y >= Height - ScarfyBoundsRectangle.height)
         {
             Velocity = 0;
-            posY = Height - RectHeight;
+            ScarfyPosition.y = Height - ScarfyBoundsRectangle.height;
             bIsInAir = false;
         }
         else
@@ -50,7 +56,7 @@ int main()
        
 
 
-        posY  += Velocity;
+       ScarfyPosition.y += Velocity;
 
         // else if (posY < Height-RectHeight)
         // {
@@ -65,6 +71,7 @@ int main()
         EndDrawing();
     }
 
+    UnloadTexture(ScarfyCharacter);
     CloseWindow();
 
 }
