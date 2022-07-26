@@ -139,12 +139,6 @@ int main()
             {
                 circle_x  -= 5; 
             }
-            
-         
-        
-
-
-
       
             if( IsKeyDown(KEY_W)  && (  circle_y > 0 + circle_radius) )
                 {
