@@ -35,7 +35,6 @@ AnimationData updateAnimData(AnimationData Data, float DeltaTime, int maxFrames)
     return Data;
 }
 
-
 int main()
 {
 
@@ -61,7 +60,6 @@ int main()
     float mgX = 0.f;
     Texture2D foreground = LoadTexture("textures/foreground.png");
     float fgX = 0.f;
-
 
     Texture2D NebulaTexture = LoadTexture("textures/12_nebula_spritesheet.png");
 
@@ -89,21 +87,16 @@ int main()
 
     // Scarfy Character Variables 
     Texture2D Scarfy = LoadTexture("textures/scarfy.png");
-
     AnimationData ScarfyData;
-
     ScarfyData.rec.width = Scarfy.width/6;
     ScarfyData.rec.height = Scarfy.height;
     ScarfyData.rec.x = 0;
     ScarfyData.rec.y = 0;
-
     ScarfyData.pos.x = Width/2 - ScarfyData.rec.width / 2 ;
     ScarfyData.pos.y = Height - ScarfyData.rec.height;
-
     ScarfyData.frame = 0;
     ScarfyData.updateTime = { 1.0f/12.0f };
     ScarfyData.runningTime = 0.f;
-
 
     bool bCollided = { false };
 
@@ -120,11 +113,13 @@ int main()
         {
             bgX = 0.f;
         }
-          if(mgX <= -background.width*4)
+
+        if(mgX <= -background.width*4)
         {
             mgX = 0.f;
         }
-          if(fgX <= -foreground.width*2)
+
+        if(fgX <= -foreground.width*2)
         {
             fgX = 0.f;
         }
@@ -143,9 +138,8 @@ int main()
         Vector2 fg2pos = {fgX + foreground.width * 2 , 100};
         DrawTextureEx(foreground, fg1pos, 0.f, 2.f, WHITE);
         DrawTextureEx(foreground, fg2pos, 0.f, 2.f, WHITE);
-        
 
-    // Scarfy is in air ?
+        // Scarfy is in air ?
         if(bScarfyOnGround(ScarfyData, Height))
         {
             Velocity = 0;
@@ -158,11 +152,10 @@ int main()
             bIsInAir = true;
         }
 
-         if( IsKeyDown(KEY_SPACE) && (!bIsInAir))
+        if( IsKeyDown(KEY_SPACE) && (!bIsInAir))
         {
             Velocity += JumpVelocity;
         }
-
         
         for (int i = 0; i < NumberOfNebulae; i++)
         {
@@ -170,15 +163,11 @@ int main()
             NebulaeArray[i].pos.x += NebulaVelocity * DeltaTime;
         }
 
-
         finishLine += NebulaVelocity * DeltaTime;
-
 
         for (int i = 0; i < NumberOfNebulae; i++)
         {
-
             NebulaeArray[i] = updateAnimData(NebulaeArray[i], DeltaTime, 7);
-
         }
         
         // Update Scarfy's jumping position value based on velocity * deltatime
@@ -186,11 +175,8 @@ int main()
 
         if(!bIsInAir)
         {
-
-            ScarfyData = updateAnimData(ScarfyData, DeltaTime, 5);
-           
+            ScarfyData = updateAnimData(ScarfyData, DeltaTime, 5);  
         }
-
 
         for( AnimationData Nebula : NebulaeArray )
         {
@@ -217,14 +203,13 @@ int main()
                 DrawText("YOU LOSE....", 100 , Height/2, 80, BLUE);
         }
          // Draw Nebulae
-            for (int i = 0; i < NumberOfNebulae; i++)
-            {
-                DrawTextureRec(NebulaTexture, NebulaeArray[i].rec, NebulaeArray[i].pos, WHITE);
-            }
+        for (int i = 0; i < NumberOfNebulae; i++)
+        {
+            DrawTextureRec(NebulaTexture, NebulaeArray[i].rec, NebulaeArray[i].pos, WHITE);
+        }
       
         EndDrawing();
     }
-
 
     UnloadTexture(midground);
     UnloadTexture(foreground);
