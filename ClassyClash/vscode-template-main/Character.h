@@ -14,6 +14,8 @@ public:
 
     void UndoMovement();
 
+    Rectangle GetCollisionRec();
+
 private:
     float Width{};
     float Height{};

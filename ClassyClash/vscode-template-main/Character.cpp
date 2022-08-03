@@ -16,6 +16,16 @@ void Character::UndoMovement()
     WorldPosition = WorldPositionLastFrame;
 }
 
+Rectangle Character::GetCollisionRec()
+{
+     return Rectangle{ 
+        ScreenPosition.x,
+        ScreenPosition.y,
+        Width * CharacterScale,
+        Height * CharacterScale
+    };
+}
+
 void Character::Tick(float DeltaTime)
 {
 
@@ -67,3 +77,4 @@ void Character::Tick(float DeltaTime)
     Rectangle KnightDest = {ScreenPosition.x, ScreenPosition.y, Width * CharacterScale, Height * CharacterScale};
     DrawTexturePro(Texture, KnightSource, KnightDest, {0, 0}, 0, WHITE);
 }
+
