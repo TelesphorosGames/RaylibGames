@@ -2,6 +2,7 @@
 #include "raymath.h"
 #include "Character.h"
 #include "Prop.h"
+#include "Enemy.h"
 
 int main()
 {
@@ -23,6 +24,10 @@ int main()
 
   Character Knight(WindowWidth, WindowHeight);
 
+  Enemy FirstGoblin{Vector2{0,0}, LoadTexture("characters/goblin_idle_spritesheet.png"), LoadTexture("characters/goblin_run_spritesheet.png")};
+  FirstGoblin.SetTarget(&Knight);
+  
+
   SetTargetFPS(60);
   while (!WindowShouldClose())
   {
@@ -39,6 +44,7 @@ int main()
     }
     
     Knight.Tick(GetFrameTime());
+  
 
     if (Knight.GetWorldPosition().x < 0.f ||
         Knight.GetWorldPosition().y < 0.f ||
@@ -56,7 +62,7 @@ int main()
         Knight.UndoMovement();
       }
     }
-
+      FirstGoblin.Tick(GetFrameTime());
 
     EndDrawing();
   }
@@ -64,8 +70,11 @@ int main()
   UnloadTexture(LogTexture);
   UnloadTexture(RockTexture);
   UnloadTexture(Knight.Idle);
-  UnloadTexture(Knight.Run);
+  UnloadTexture(Knight.Run);  
   UnloadTexture(Knight.Texture);
+  UnloadTexture(FirstGoblin.Texture);
+  UnloadTexture(FirstGoblin.Idle);
+  UnloadTexture(FirstGoblin.Run);
   UnloadTexture(ClashMap);
   CloseWindow();
 }
