@@ -15,10 +15,14 @@ public:
 
     virtual void Tick(float DeltaTime) override;
 
-
+    virtual Vector2 GetScreenPosition() override;
 private:
 
     Character* Target;
+
+    float DamagePerSecond;
+
+    float Radius = {25.f};
 
 
 

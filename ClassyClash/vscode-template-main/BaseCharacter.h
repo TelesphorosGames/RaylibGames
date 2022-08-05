@@ -20,6 +20,11 @@ class BaseCharacter
 
     virtual void Tick(float DeltaTime);
 
+    virtual Vector2 GetScreenPosition() = 0;
+
+    bool GetAlive() { return bAlive ; }
+    void SetAlive(bool Alive) { bAlive = Alive; }
+
 
     protected:
 
@@ -27,7 +32,7 @@ class BaseCharacter
     float Width{};
     float Height{};
 
-    Vector2 ScreenPosition{};
+
     Vector2 WorldPosition{};
 
     Vector2 WorldPositionLastFrame{};
@@ -42,9 +47,13 @@ class BaseCharacter
     float CharacterScale={4.0f};
     float Speed = {4.f};
 
+    Vector2 Velocity{};
+
 
     private:
 
+
+    bool bAlive = true;
 
 };
 

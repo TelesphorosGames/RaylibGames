@@ -1,52 +1,93 @@
 #include "Character.h"
 #include "raymath.h"
 
-Character::Character(int WindowWidth, int WindowHeight)
+Character::Character(int WinWidth, int WinHeight) :
+WindowWidth(WinWidth),
+WindowHeight(WinHeight)
+
 {
     Width = Texture.width / MaxFrames;
     Height = Texture.height;
 
-    ScreenPosition = {static_cast<float>(WindowWidth / 2 - CharacterScale * (0.5f * Width)), 
+   }
+
+Vector2 Character::GetScreenPosition()
+{
+
+    return {static_cast<float>(WindowWidth / 2 - CharacterScale * (0.5f * Width)), 
                       static_cast<float>(WindowHeight / 2 - CharacterScale * (0.5f * Height))};
+
 }
 
+void Character::TakeDamage(float Damage)
+{
+    Health -= Damage;
+
+    if(Health<=0.f)
+    {
+        SetAlive(false);
+    }
+}
 
 void Character::Tick(float DeltaTime)
 {
 
+    if(!GetAlive()) return;
     WorldPositionLastFrame = WorldPosition;
-    Vector2 Direction{};
+    
 
     if (IsKeyDown(KEY_A))
     {
-        Direction.x -= 1.0;
+        Velocity.x -= 1.0;
     }
     if (IsKeyDown(KEY_D))
     {
-        Direction.x += 1.0;
+        Velocity.x += 1.0;
     }
     if (IsKeyDown(KEY_W))
     {
-        Direction.y -= 1.0;
+        Velocity.y -= 1.0;
     }
     if (IsKeyDown(KEY_S))
     {
-        Direction.y += 1.0;
-    }
-
-    if (Vector2Length(Direction) != 0.0)
-    {
-
-        Texture = Run;
-        WorldPosition = Vector2Add(WorldPosition, Vector2Scale(Vector2Normalize(Direction), Speed));
-
-        Direction.x > 0.f ? RightLeft = 1.f : RightLeft = -1.f;
-    }
-    else
-    {
-        Texture = Idle;
+        Velocity.y += 1.0;
     }
 
     BaseCharacter::Tick(DeltaTime);
+
+    Vector2 Origin{};
+    Vector2 Offset{};
+    float Rotation{};
+
+    if(RightLeft > 0.f)
+    {
+        Origin = { 0.f, Weapon.height*CharacterScale};
+        Offset = { 35.f, 55.f };
+        WeaponCollisionRec = { GetScreenPosition().x + Offset.x + 10.f, GetScreenPosition().y + Offset.y - Weapon.height *CharacterScale, Weapon.width * CharacterScale, Weapon.height * CharacterScale };
+        
+        IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? Rotation = 35.f : Rotation = 0.f;
+        
+    }
+    else
+    {
+        Origin = {Weapon.width * CharacterScale, Weapon.height*CharacterScale};
+        Offset = { 25.f, 55.f };
+        WeaponCollisionRec = { GetScreenPosition().x + Offset.x - Weapon.width* CharacterScale, GetScreenPosition().y + Offset.y - Weapon.height *CharacterScale, Weapon.width * CharacterScale, Weapon.height * CharacterScale };
+        Rotation = -30.f;
+
+        IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? Rotation = -35.f : Rotation = 0.f;
+    
+    }
+
+    // Draw sword
+
+    Rectangle Source = { 0.f, 0.f, static_cast<float>(Weapon.width) * RightLeft, static_cast<float>(Weapon.height)};
+    Rectangle Dest = { GetScreenPosition().x + Offset.x, GetScreenPosition().y + Offset.y, Weapon.width * CharacterScale, Weapon.height * CharacterScale};
+
+    DrawTexturePro(Weapon, Source, Dest, Origin, Rotation, WHITE);
+    
+    // DrawRectangleLines(WeaponCollisionRec.x, WeaponCollisionRec.y, WeaponCollisionRec.width, WeaponCollisionRec.height, RED);
 }
+
+
 
